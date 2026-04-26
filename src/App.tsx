@@ -5,18 +5,18 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Wallet, 
-  TrendingUp, 
-  PieChart, 
-  Sparkles, 
-  BrainCircuit, 
-  AlertCircle, 
-  ArrowRight, 
-  CheckCircle2, 
-  Coins, 
-  ShoppingCart, 
-  Home, 
+import {
+  Wallet,
+  TrendingUp,
+  PieChart,
+  Sparkles,
+  BrainCircuit,
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  Coins,
+  ShoppingCart,
+  Home,
   Coffee,
   HeartPulse,
   GraduationCap,
@@ -69,7 +69,7 @@ export default function App() {
     setError(null);
     setThinkingState('analyzing');
     setLogs([]);
-    
+
     try {
       addLog("Initializing Gemini-3-Flash-Preview...");
       await new Promise(r => setTimeout(r, 800));
@@ -144,20 +144,20 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-white">
       <div className="max-w-[1200px] mx-auto min-h-screen flex flex-col p-6 md:p-12">
-        
+
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="flex flex-col">
-            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">The Agentic Age / GDG Manila</h1>
-            <h2 className="text-4xl font-serif italic text-white tracking-tight">Intelligent Budget Drafter</h2>
+            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">The Agentic Age / GDGManila</h1>
+            <h2 className="text-4xl font-serif italic text-white tracking-tight">Agentic Budgeter</h2>
           </div>
-          
+
           <div className="flex items-center gap-6 text-[10px] font-mono tracking-tighter uppercase opacity-60 bg-white/5 px-4 py-2 rounded-full border border-white/10">
             <div className="flex items-center gap-2">
               <span className={cn(
                 "w-2 h-2 rounded-full shadow-[0_0_8px_#10b981] transition-colors",
                 thinkingState !== 'idle' ? "bg-emerald-500 animate-pulse" : "bg-emerald-800"
-              )}></span> 
+              )}></span>
               Agent Active
             </div>
             <div className="hidden sm:block">API Status: Optimal</div>
@@ -165,19 +165,19 @@ export default function App() {
         </header>
 
         <main className="flex flex-col lg:flex-row gap-8 flex-1">
-          
+
           {/* Left Column: Input and Logs */}
           <aside className="lg:w-1/3 flex flex-col gap-6">
             <section className="bg-[#0D0D0D] border border-white/10 p-8 rounded-3xl flex flex-col gap-6 shadow-2xl">
               <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-500/80">Financial Calibration</h3>
-              
+
               <div className="space-y-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-[11px] uppercase font-mono tracking-widest opacity-40">Monthly Salary (PHP)</label>
                   <div className="relative group">
                     <span className="absolute left-0 top-1/2 -translate-y-1/2 text-emerald-500 text-lg">₱</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={salary}
                       onChange={(e) => setSalary(e.target.value)}
                       placeholder="45,000"
@@ -190,7 +190,7 @@ export default function App() {
                   <label className="text-[11px] uppercase font-mono tracking-widest opacity-40">Lifestyle Priority</label>
                   <div className="grid grid-cols-3 gap-2 bg-white/5 p-1 rounded-xl">
                     {['Minimalist', 'Balanced', 'Social'].map(s => (
-                      <button 
+                      <button
                         key={s}
                         onClick={() => setLifestyle(s)}
                         className={cn(
@@ -206,7 +206,7 @@ export default function App() {
 
                 <div className="flex flex-col gap-2">
                   <label className="text-[11px] uppercase font-mono tracking-widest opacity-40">Additional Parameters</label>
-                  <textarea 
+                  <textarea
                     value={customInfo}
                     onChange={(e) => setCustomInfo(e.target.value)}
                     placeholder="Saving for a trip, student loans..."
@@ -217,7 +217,7 @@ export default function App() {
 
               {error && <p className="text-rose-500 text-[10px] font-mono uppercase bg-rose-500/10 p-3 rounded-lg border border-rose-500/20">{error}</p>}
 
-              <button 
+              <button
                 onClick={handleGenerate}
                 disabled={thinkingState !== 'idle' && thinkingState !== 'completed'}
                 className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 text-black font-black py-4 rounded-2xl transition-all uppercase text-[11px] tracking-[0.2em] shadow-[0_4px_20px_rgba(16,185,129,0.2)] active:scale-95"
@@ -234,10 +234,10 @@ export default function App() {
               <div className="font-mono text-[10px] space-y-2 opacity-50 overflow-hidden">
                 {logs.length === 0 && <div className="italic tracking-widest leading-relaxed">Agent awaiting initialization...</div>}
                 {logs.map((log, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, x: -5 }} 
-                    animate={{ opacity: 1, x: 0 }} 
-                    key={i} 
+                  <motion.div
+                    initial={{ opacity: 0, x: -5 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    key={i}
                     className={cn(log.includes("complete") ? "text-emerald-500" : "")}
                   >
                     {log}
@@ -252,24 +252,24 @@ export default function App() {
 
           {/* Right Column: Execution/Results */}
           <section className="flex-1 flex flex-col gap-6">
-            
+
             <AnimatePresence mode="wait">
               {recommendation ? (
-                <motion.div 
+                <motion.div
                   key="results"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="contents"
                 >
-                  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-center h-48 relative overflow-hidden">
+                  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-center min-h-[12rem] h-auto relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"></div>
-                    <div className="flex items-center gap-6 relative z-10">
-                      <div className="w-16 h-16 rounded-full border border-emerald-500/30 flex items-center justify-center animate-spin-slow">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10">
+                      <div className="w-16 h-16 shrink-0 rounded-full border border-emerald-500/30 flex items-center justify-center animate-spin-slow">
                         <div className="w-10 h-10 rounded-full border-t-2 border-emerald-500"></div>
                       </div>
                       <div className="flex flex-col gap-1">
-                        <span className="text-2xl font-serif italic text-white leading-tight">"{recommendation.advice.slice(0, 80)}..."</span>
-                        <span className="text-[10px] text-emerald-500 font-mono uppercase tracking-widest opacity-70">Focus: {recommendation.savingsGoal}</span>
+                        <span className="text-xl sm:text-2xl font-serif italic text-white leading-tight">"{recommendation.advice.slice(0, 80)}..."</span>
+                        <span className="text-[10px] text-emerald-500 font-mono uppercase tracking-widest opacity-70 mt-2">Focus: {recommendation.savingsGoal}</span>
                       </div>
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export default function App() {
                             </ul>
                           </div>
                           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-6">
-                            <motion.div 
+                            <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${percent}%` }}
                               className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
@@ -312,7 +312,7 @@ export default function App() {
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                           {recommendation.lifestyleTips.map((tip, i) => (
                             <li key={i} className="text-xs italic font-serif leading-relaxed text-emerald-100 flex gap-3">
-                              <span className="text-emerald-500 font-mono">[{i+1}]</span> {tip}
+                              <span className="text-emerald-500 font-mono">[{i + 1}]</span> {tip}
                             </li>
                           ))}
                         </ul>
@@ -336,12 +336,12 @@ export default function App() {
         <footer className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[10px] font-mono opacity-30 uppercase tracking-[0.2em] gap-4">
           <span>System: AIS-v.1.0.42</span>
           <div className="flex items-center gap-4">
-            <span>Encrypted Session</span>
+            <span className="w-1 h-1 bg-white/20 rounded-full"></span>
+            <span>By: Kane Justine Cometa</span>
             <span className="w-1 h-1 bg-white/20 rounded-full"></span>
             <span>GDG Manila Hackathon 2026</span>
           </div>
         </footer>
-
       </div>
     </div>
   );
