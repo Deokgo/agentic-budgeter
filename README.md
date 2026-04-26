@@ -1,20 +1,25 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Agentic Budget Plan
 
-# Run and deploy your AI Studio app
+Agentic Budget Plan is a hyper-intelligent budgeting agent designed for professionals in their 20s. It goes beyond a simple calculator by contextually analyzing Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Google Gemini.
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/402b9ced-a056-4cd6-9947-e57b88fac6dc
+## Features
+- Optimizes the 50/30/20 budget rule tailored to your lifestyle.
+- Analyzes current economic conditions in the Philippines.
+- Built with React, Tailwind CSS, and Google Gen AI SDK.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+   ```bash
+   npm install
+   ```
+2. Set the `GEMINI_API_KEY` in `.env` (or `.env.local`) to your Gemini API key. There is an `.env.example` to guide you.
 3. Run the app:
-   `npm run dev`
+   ```bash
+   npm run dev
+   ```
+
+## Built By
+Kane Justine Cometa - GDG Manila Hackathon 2026
