@@ -147,9 +147,12 @@ export default function App() {
 
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-          <div className="flex flex-col">
-            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">The Agentic Age / GDGManila</h1>
-            <h2 className="text-4xl font-serif italic text-white tracking-tight">Agentic Budgeter</h2>
+          <div className="flex flex-col max-w-xl">
+            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">Budgeting in your 20s</h1>
+            <h2 className="text-4xl font-serif italic text-white tracking-tight mb-4">Agentic Budget Plan</h2>
+            <p className="text-[12px] sm:text-xs text-white/50 leading-relaxed max-w-md">
+              This app goes beyond a simple calculator. It functions as a financial agent that contextually analyzes Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Gemini.
+            </p>
           </div>
 
           <div className="flex items-center gap-6 text-[10px] font-mono tracking-tighter uppercase opacity-60 bg-white/5 px-4 py-2 rounded-full border border-white/10">
@@ -180,7 +183,7 @@ export default function App() {
                       type="text"
                       value={salary}
                       onChange={(e) => setSalary(e.target.value)}
-                      placeholder="45,000"
+                      placeholder="20,000"
                       className="w-full bg-transparent border-b border-white/10 focus:border-emerald-500 outline-none pb-2 pl-6 text-2xl font-mono transition-all text-white"
                     />
                   </div>
@@ -222,7 +225,7 @@ export default function App() {
                 disabled={thinkingState !== 'idle' && thinkingState !== 'completed'}
                 className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 text-black font-black py-4 rounded-2xl transition-all uppercase text-[11px] tracking-[0.2em] shadow-[0_4px_20px_rgba(16,185,129,0.2)] active:scale-95"
               >
-                {recommendation ? "Regenerate Blueprint" : "Invoke Agentic Drafter"}
+                {recommendation ? "Regenerate Budget Plan" : "Invoke Agentic Budgeting"}
               </button>
             </section>
 
@@ -324,7 +327,7 @@ export default function App() {
               ) : (
                 <div className="flex-1 flex flex-col justify-center items-center text-center p-12 border-2 border-dashed border-white/5 rounded-3xl opacity-40">
                   <Coins className="w-16 h-16 mb-6 text-white/20" />
-                  <p className="text-xl font-serif italic mb-2">Awaiting Draft Parameters</p>
+                  <p className="text-xl font-serif italic mb-2">Awaiting Budget Parameters</p>
                   <p className="text-xs font-mono uppercase tracking-widest max-w-xs">Configure your salary to generate an optimized financial machine.</p>
                 </div>
               )}
