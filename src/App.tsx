@@ -179,15 +179,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-white">
-      <div className="max-w-[1200px] mx-auto min-h-screen flex flex-col p-6 md:p-12">
+      <div className="max-w-[1200px] mx-auto min-h-screen flex flex-col p-8 md:p-12">
 
         {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
           <div className="flex flex-col max-w-xl">
-            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">Budgeting in your 20s</h1>
-            <h2 className="text-4xl font-serif italic text-white tracking-tight mb-4">Agentic Budget Plan</h2>
+            <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">agentic budget planner</h1>
+            <h2 className="text-5xl font-serif italic text-white tracking-tight mb-4">Budgent</h2>
             <p className="text-[12px] sm:text-xs text-white/50 leading-relaxed max-w-md">
-              Budgeting in your 20s can be overwhelming, especially with the rising cost of living in the metro. This app goes beyond a simple calculator. It functions as a financial agent that contextually analyzes Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Gemini.
+              Budgeting in your 20s can be overwhelming, especially with the rising cost of living in the metro. This app goes beyond a simple calculator. It functions as a financial agent that analyzes 20s-specific lifestyle goals using Gemini AI.
             </p>
           </div>
 
@@ -199,11 +199,11 @@ export default function App() {
               )}></span>
               Agent Active
             </div>
-            <div className="hidden sm:block">API Status: Optimal</div>
+            <div>API Status: Optimal</div>
           </div>
         </header>
 
-        <main className="flex flex-col lg:flex-row gap-8 flex-1">
+        <main className="flex flex-col lg:flex-row gap-6 flex-1">
 
           {/* Left Column: Input and Logs */}
           <aside className="lg:w-1/3 flex flex-col gap-6">
@@ -351,7 +351,7 @@ export default function App() {
                           <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-3">Agent Insight Optimization</div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                             {recommendation.lifestyleTips.map((tip, i) => (
-                              <li key={i} className="text-xs font-serif leading-relaxed text-emerald-100 flex gap-3">
+                              <li key={i} className="text-[13px] font-serif leading-relaxed text-emerald-100 flex gap-3">
                                 <span className="text-emerald-500 font-mono">[{i + 1}]</span> {tip}
                               </li>
                             ))}
@@ -362,7 +362,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-center">
                     <button
                       onClick={handleExport}
                       disabled={isExporting}
