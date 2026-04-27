@@ -1,5 +1,7 @@
 # Agentic Budget Plan
 
+https://agentic-budget-plan.vercel.app
+
 Agentic Budget Plan is a hyper-intelligent budgeting agent designed for professionals in their 20s. It goes beyond a simple calculator by contextually analyzing Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Google Gemini.
 
 ## Features
