@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Wallet,
@@ -22,10 +22,12 @@ import {
   GraduationCap,
   Save,
   Trash2,
-  RefreshCcw
+  RefreshCcw,
+  Download
 } from 'lucide-react';
 import { GoogleGenAI, Type } from "@google/genai";
 import { BudgetRecommendation, BudgetCategory, ThinkingState } from './types';
+import { toPng } from 'html-to-image';
 
 // Mock utility for class merging if needed
 function cn(...classes: string[]) {
@@ -53,6 +55,8 @@ export default function App() {
   const [thinkingState, setThinkingState] = useState<ThinkingState>('idle');
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const ai = useMemo(() => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }), []);
 
@@ -135,6 +139,38 @@ export default function App() {
     }
   };
 
+  const handleExport = async () => {
+    if (!exportRef.current) return;
+    try {
+      setIsExporting(true);
+      const node = exportRef.current;
+      const padding = 22; // 4rem padding for a nice spacious card look
+      const width = node.offsetWidth + padding * 2;
+      const height = node.offsetHeight + padding * 2;
+
+      const dataUrl = await toPng(node, {
+        cacheBust: true,
+        backgroundColor: '#050505',
+        width: width,
+        height: height,
+        style: {
+          padding: `${padding}px`,
+          margin: '0',
+          width: `${width}px`,
+          height: `${height}px`
+        }
+      });
+      const link = document.createElement('a');
+      link.download = 'agentic-budget-plan.png';
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to export image', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const reset = () => {
     setRecommendation(null);
     setThinkingState('idle');
@@ -151,7 +187,7 @@ export default function App() {
             <h1 className="text-xs font-mono tracking-[0.3em] text-emerald-500 uppercase mb-2">Budgeting in your 20s</h1>
             <h2 className="text-4xl font-serif italic text-white tracking-tight mb-4">Agentic Budget Plan</h2>
             <p className="text-[12px] sm:text-xs text-white/50 leading-relaxed max-w-md">
-              This app goes beyond a simple calculator. It functions as a financial agent that contextually analyzes Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Gemini.
+              Budgeting in your 20s can be overwhelming, especially with the rising cost of living in the metro. This app goes beyond a simple calculator. It functions as a financial agent that contextually analyzes Metro Manila’s cost of living, tax brackets, and 20s-specific lifestyle goals using Gemini.
             </p>
           </div>
 
@@ -208,7 +244,7 @@ export default function App() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[11px] uppercase font-mono tracking-widest opacity-40">Additional Parameters</label>
+                  <label className="text-[11px] uppercase font-mono tracking-widest opacity-40">Specify your financial goals:</label>
                   <textarea
                     value={customInfo}
                     onChange={(e) => setCustomInfo(e.target.value)}
@@ -225,7 +261,7 @@ export default function App() {
                 disabled={thinkingState !== 'idle' && thinkingState !== 'completed'}
                 className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 text-black font-black py-4 rounded-2xl transition-all uppercase text-[11px] tracking-[0.2em] shadow-[0_4px_20px_rgba(16,185,129,0.2)] active:scale-95"
               >
-                {recommendation ? "Regenerate Budget Plan" : "Invoke Agentic Budgeting"}
+                {recommendation ? "Regenerate Budget Plan" : "Create Budget Plan"}
               </button>
             </section>
 
@@ -262,66 +298,79 @@ export default function App() {
                   key="results"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="contents"
+                  className="flex flex-col gap-6 w-full"
                 >
-                  <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-center min-h-[12rem] h-auto relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"></div>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10">
-                      <div className="w-16 h-16 shrink-0 rounded-full border border-emerald-500/30 flex items-center justify-center animate-spin-slow">
-                        <div className="w-10 h-10 rounded-full border-t-2 border-emerald-500"></div>
+                  <div ref={exportRef} className="flex flex-col gap-6">
+                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-center min-h-[12rem] h-auto relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"></div>
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10">
+                        <div className="w-16 h-16 shrink-0 rounded-full border border-emerald-500/30 flex items-center justify-center animate-spin-slow">
+                          <div className="w-10 h-10 rounded-full border-t-2 border-emerald-500"></div>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xl sm:text-2xl font-serif italic text-white leading-tight">"{recommendation.advice.slice(0, 80)}..."</span>
+                          <span className="text-[10px] text-emerald-500 font-mono uppercase tracking-widest opacity-70 mt-2">Focus: {recommendation.savingsGoal}</span>
+                        </div>
                       </div>
-                      <div className="flex flex-col gap-1">
-                        <span className="text-xl sm:text-2xl font-serif italic text-white leading-tight">"{recommendation.advice.slice(0, 80)}..."</span>
-                        <span className="text-[10px] text-emerald-500 font-mono uppercase tracking-widest opacity-70 mt-2">Focus: {recommendation.savingsGoal}</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1">
+                      {['Needs', 'Wants', 'Savings'].map((type) => {
+                        const amount = recommendation.categories
+                          .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
+                          .reduce((acc, c) => acc + c.amount, 0);
+                        const percent = recommendation.categories
+                          .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
+                          .reduce((acc, c) => acc + c.percentage, 0);
+
+                        return (
+                          <div key={type} className="bg-[#0D0D0D] border border-white/10 p-6 rounded-3xl flex flex-col justify-between group hover:border-emerald-500/30 transition-all">
+                            <div>
+                              <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-4">{type} ({percent}%)</h4>
+                              <div className="text-4xl font-serif text-white group-hover:text-emerald-400 transition-colors">₱{amount.toLocaleString()}</div>
+                              <ul className="text-[11px] mt-4 opacity-50 space-y-2 font-mono">
+                                {recommendation.categories
+                                  .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
+                                  .slice(0, 3)
+                                  .map(c => <li key={c.name} className="flex justify-between"><span>{c.name}</span> <span className="text-white/60">₱{c.amount.toLocaleString()}</span></li>)}
+                              </ul>
+                            </div>
+                            <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-6">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${percent}%` }}
+                                className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                              ></motion.div>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      <div className="md:col-span-2 lg:col-span-3 bg-emerald-950/20 border border-emerald-500/20 p-8 rounded-3xl flex flex-col md:flex-row items-center gap-8 text-center md:text-left relative overflow-hidden group">
+                        <div className="relative z-10 flex-1">
+                          <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-3">Agent Insight Optimization</div>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+                            {recommendation.lifestyleTips.map((tip, i) => (
+                              <li key={i} className="text-xs font-serif leading-relaxed text-emerald-100 flex gap-3">
+                                <span className="text-emerald-500 font-mono">[{i + 1}]</span> {tip}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <Sparkles className="w-12 h-12 text-emerald-500/20 group-hover:text-emerald-500/40 transition-all duration-700" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1">
-                    {['Needs', 'Wants', 'Savings'].map((type) => {
-                      const amount = recommendation.categories
-                        .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
-                        .reduce((acc, c) => acc + c.amount, 0);
-                      const percent = recommendation.categories
-                        .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
-                        .reduce((acc, c) => acc + c.percentage, 0);
-
-                      return (
-                        <div key={type} className="bg-[#0D0D0D] border border-white/10 p-6 rounded-3xl flex flex-col justify-between group hover:border-emerald-500/30 transition-all">
-                          <div>
-                            <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-4">{type} ({percent}%)</h4>
-                            <div className="text-4xl font-serif text-white group-hover:text-emerald-400 transition-colors">₱{amount.toLocaleString()}</div>
-                            <ul className="text-[11px] mt-4 opacity-50 space-y-2 font-mono">
-                              {recommendation.categories
-                                .filter(c => c.category === type || (type === 'Savings' && c.category === 'Debt'))
-                                .slice(0, 3)
-                                .map(c => <li key={c.name} className="flex justify-between"><span>{c.name}</span> <span className="text-white/60">₱{c.amount.toLocaleString()}</span></li>)}
-                            </ul>
-                          </div>
-                          <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-6">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${percent}%` }}
-                              className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                            ></motion.div>
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    <div className="md:col-span-2 lg:col-span-3 bg-emerald-950/20 border border-emerald-500/20 p-8 rounded-3xl flex flex-col md:flex-row items-center gap-8 text-center md:text-left relative overflow-hidden group">
-                      <div className="relative z-10 flex-1">
-                        <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-3">Agent Insight Optimization</div>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
-                          {recommendation.lifestyleTips.map((tip, i) => (
-                            <li key={i} className="text-xs italic font-serif leading-relaxed text-emerald-100 flex gap-3">
-                              <span className="text-emerald-500 font-mono">[{i + 1}]</span> {tip}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <Sparkles className="w-12 h-12 text-emerald-500/20 group-hover:text-emerald-500/40 transition-all duration-700" />
-                    </div>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleExport}
+                      disabled={isExporting}
+                      className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-emerald-500 hover:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 py-2 px-4 rounded-xl transition-all border border-emerald-500/20 disabled:opacity-50"
+                    >
+                      {isExporting ? <RefreshCcw className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
+                      {isExporting ? 'Exporting...' : 'Export Budget Plan'}
+                    </button>
                   </div>
                 </motion.div>
               ) : (
