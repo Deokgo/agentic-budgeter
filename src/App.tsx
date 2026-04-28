@@ -374,10 +374,10 @@ export default function App() {
                   </div>
                 </motion.div>
               ) : (
-                <div className="flex-1 flex flex-col justify-center items-center text-center p-12 border-2 border-dashed border-white/5 rounded-3xl opacity-40">
+                <div className="flex-1 flex flex-col justify-start items-center text-center p-12 border-2 border-dashed border-white/5 rounded-3xl opacity-40">
                   <Coins className="w-16 h-16 mb-6 text-white/20" />
-                  <p className="text-xl font-serif italic mb-2">Awaiting Budget Parameters</p>
-                  <p className="text-xs font-mono uppercase tracking-widest max-w-xs">Configure your salary to generate an optimized financial machine.</p>
+                  <p className="text-xl font-serif mb-2">Awaiting Budget Parameters</p>
+                  <p className="text-xs text-emerald-500/80 font-mono uppercase tracking-widest max-w-xs">Enter your salary and goals to generate an optimized budget plan.</p>
                 </div>
               )}
             </AnimatePresence>
